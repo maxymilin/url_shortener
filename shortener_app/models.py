@@ -6,6 +6,7 @@ from .database import Base
 
 class URL(Base):
     """Save to database target url and short code."""
+
     __tablename__ = "urls"
 
     id = Column(Integer, primary_key=True)

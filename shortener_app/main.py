@@ -23,6 +23,7 @@ def get_db():
 def raise_bad_request(message):
     raise HTTPException(status_code=400, detail=message)
 
+
 @app.get("/")
 async def root():
     return "Hello, World"
@@ -35,10 +36,7 @@ def create_url(url: schemas.URLBase, db: Session = Depends(get_db)):
 
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
     key = "".join(secrets.choice(chars) for _ in range(5))
-    db_url = models.URL(
-        target_url=url.target_url,
-        key=key
-    )
+    db_url = models.URL(target_url=url.target_url, key=key)
     db.add(db_url)
     db.commit()
     db.refresh(db_url)
