@@ -42,16 +42,18 @@ async def root():
 async def create_url(url: schemas.URLBase):
     if not validators.url(url.target_url):
         raise_bad_request(message="URL is not valid")
-    print("I get url", url.target_url)
+    exist_url = await models.URL.is_exist(url.target_url)
+    if exist_url:
+        return exist_url
+
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
     key = "".join(secrets.choice(chars) for _ in range(5))
     db_url = await models.URL.create(target_url=url.target_url, key=key)
-    db_url.url = key
     return db_url
 
 
 @app.get("/{url_key}")
-async def forvard_to_target_url(url_key: str, request: Request):
+async def forvard_target_url(url_key: str, request: Request):
     db_url = await models.URL.get(url_key)
     if db_url:
         return RedirectResponse(db_url.target_url)

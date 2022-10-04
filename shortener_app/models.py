@@ -36,3 +36,13 @@ class URL(Base):
             return full_url
         except TypeError:
             return None
+
+    @classmethod
+    async def is_exist(cls, target_url):
+        query = select(cls).where(cls.target_url == target_url)
+        full_urls = await db.execute(query)
+        try:
+            (full_url,) = full_urls.first()
+            return full_url
+        except TypeError:
+            return False
