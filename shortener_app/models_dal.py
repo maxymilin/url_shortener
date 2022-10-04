@@ -1,6 +1,3 @@
-import secrets
-
-
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
@@ -12,12 +9,7 @@ class UrlDAL():
         self.db_session = db_session
 
 
-    async def create_url(self, target_url: str):
-        print(target_url)
-        chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
-        key = "".join(secrets.choice(chars) for _ in range(5))
-        new_url = URL(key=key, target_url=target_url)
-        print(new_url)
+    async def create_url(self, new_url: URL):
         self.db_session.add(new_url)
         await self.db_session.flush()
         return new_url

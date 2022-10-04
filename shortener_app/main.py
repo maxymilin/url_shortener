@@ -41,8 +41,15 @@ async def create_url(url: schemas.URLBase):
             if not validators.url(url.target_url):
                 raise_bad_request(message="URL is not valid")
             print("I get url", url.target_url)
+            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+            key = "".join(secrets.choice(chars) for _ in range(5))
+            db_url = models.URL(
+                target_url=url.target_url, key=key
+            )
             url_dal = UrlDAL(session)
-            return await url_dal.create_url(url.target_url)
+            await url_dal.create_url(db_url)
+            db_url.url = key
+            return db_url
 
 
 # @app.get("/{url_key}")
