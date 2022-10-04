@@ -54,6 +54,12 @@ async def create_url(url: schemas.URLBase):
     return db_url
 
 
+@app.get("/count")
+async def get_url_count():
+    count = await models.URL.calls()
+    return f"Number of shortened urls: {count}"
+
+
 @app.get("/{url_key}")
 async def forvard_target_url(url_key: str, request: Request):
     db_url = await models.URL.get(url_key)

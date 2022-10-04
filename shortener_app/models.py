@@ -53,9 +53,10 @@ class URL(Base):
 
     @classmethod
     async def calls(cls):
-        query = select(cls.count)
+        query = select(cls.calls_count)
         num_calls = await db.execute(query)
         num_calls = sum(num_calls.scalars().all())
+        return num_calls
 
     @classmethod
     async def update_calls(cls, url, calls_count):
