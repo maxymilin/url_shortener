@@ -1,4 +1,3 @@
-from calendar import c
 from pydantic import BaseModel
 
 
@@ -12,7 +11,6 @@ class URLBase(BaseModel):
 class URL(URLBase):
     """URL with chortered url and user ip."""
     url: str
-    user_ip: str
 
     class Config:
         """Tell pydantic to work with a database model"""
