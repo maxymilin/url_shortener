@@ -1,4 +1,7 @@
+from itertools import count
+
 from sqlalchemy import Column, Integer, String
+from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.future import select
 
 
@@ -13,6 +16,7 @@ class URL(Base):
     id = Column(Integer, primary_key=True)
     key = Column(String, unique=True, index=True)
     target_url = Column(String, index=True)
+    calls_count = Column(Integer, default=1)
 
     @classmethod
     async def create(cls, key, target_url):
@@ -46,3 +50,24 @@ class URL(Base):
             return full_url
         except TypeError:
             return False
+
+    @classmethod
+    async def calls(cls):
+        query = select(cls.count)
+        num_calls = await db.execute(query)
+        num_calls = sum(num_calls.scalars().all())
+
+    @classmethod
+    async def update_calls(cls, url, calls_count):
+        query = (
+            sqlalchemy_update(cls)
+            .where(cls.target_url == url)
+            .values(calls_count=calls_count)
+            .execution_options(synchronize_session="fetch")
+        )
+        await db.execute(query)
+        try:
+            await db.commit()
+        except Exception:
+            await db.rollback()
+            raise

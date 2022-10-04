@@ -44,6 +44,8 @@ async def create_url(url: schemas.URLBase):
         raise_bad_request(message="URL is not valid")
     exist_url = await models.URL.is_exist(url.target_url)
     if exist_url:
+        update_calls = exist_url.calls_count + 1
+        await models.URL.update_calls(url=url.target_url, calls_count=update_calls)
         return exist_url
 
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
