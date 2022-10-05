@@ -40,7 +40,7 @@ async def root():
 
 @app.post("/shorten_url", response_model=schemas.URL)
 async def create_url(url: schemas.URLBase, request: Request):
-    client_ip = request.client.host + ":" + str(request.client.port) + "|"
+    client_ip = request.client.host + "|" #+ str(request.client.port) + "|"
     if not validators.url(url.target_url):
         raise_bad_request(message="URL is not valid")
     exist_client = await models.Client.is_exist(client_ip, url.target_url)
@@ -56,12 +56,6 @@ async def create_url(url: schemas.URLBase, request: Request):
             target_url=url.target_url,
             key=key,
         )
-    # resp_url = schemas.URL()
-    # print(type(url.target_url))
-    # print(type(key))
-    # resp_url.target_url = url.target_url
-    # resp_url.key = key
-    # return resp_url
     return db_url
 
 
@@ -79,7 +73,7 @@ async def get_top_ten():
 
 @app.get("/{url_key}")
 async def forvard_target_url(url_key: str, request: Request):
-    db_url = await models.URL.get_full_url(url_key)
+    db_url = await models.URL.get(key=url_key)
     if db_url:
         return RedirectResponse(db_url.target_url)
     else:

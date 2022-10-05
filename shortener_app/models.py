@@ -31,34 +31,21 @@ class URL(Base):
         return db_url
 
     @classmethod
-    async def get(cls, url_id):
-        query = select(cls).where(cls.id == url_id)
+    async def get(cls, url_id=None, target_url=None, key=None):
+        if url_id:
+            query = select(cls).where(cls.id == url_id)
+        elif target_url:
+            query = select(cls).where(cls.target_url == target_url)
+        elif key:
+            query = select(cls).where(cls.key == key)
+        else:
+            return None
         full_urls = await db.execute(query)
         try:
             (full_url,) = full_urls.first()
             return full_url
         except TypeError:
             return None
-
-    @classmethod
-    async def get_full_url(cls, url):
-        query = select(cls).where(cls.key == url)
-        full_urls = await db.execute(query)
-        try:
-            (full_url,) = full_urls.first()
-            return full_url
-        except TypeError:
-            return None
-
-    @classmethod
-    async def is_exist(cls, target_url):
-        query = select(cls).where(cls.target_url == target_url)
-        full_urls = await db.execute(query)
-        try:
-            (full_url,) = full_urls.first()
-            return full_url
-        except TypeError:
-            return False
 
     @classmethod
     async def calls(cls):
@@ -91,7 +78,7 @@ class URL(Base):
 
 
 class Client(Base):
-    """Table with unic URLs and count calls"""
+    """Client table"""
 
     __tablename__ = "clients"
 
@@ -102,7 +89,7 @@ class Client(Base):
     @classmethod
     async def create(cls, client_ip, target_url, key):
         client_ip_url = client_ip + target_url
-        db_url = await URL.is_exist(target_url)
+        db_url = await URL.get(target_url=target_url)
         if db_url:
             url_id = db_url.id
             print("There are url", db_url.target_url)
