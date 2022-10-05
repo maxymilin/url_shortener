@@ -1,6 +1,7 @@
 import secrets
 import validators
 
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse
 
@@ -22,6 +23,11 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await db.close()
+
+
+def raise_not_found(request):
+    message = f"URL '{request.url}' doesn't exist"
+    raise HTTPException(status_code=404, detail=message)
 
 
 def raise_bad_request(message):
