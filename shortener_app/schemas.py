@@ -12,7 +12,7 @@ class URLBase(BaseModel):
 class URL(URLBase):
     """URL with chortered url and user ip."""
 
-    url: str
+    key: str
 
     class Config:
         """Tell pydantic to work with a database model"""
