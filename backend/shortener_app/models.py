@@ -71,7 +71,7 @@ class URL(Base):
 
     @classmethod
     async def get_top(cls, limit=10):
-        query = select(cls.target_url).order_by(cls.calls_count).limit(limit)
+        query = select(cls.target_url).limit(limit).order_by(cls.calls_count)
         top_result = await db.execute(query)
         top_result = top_result.scalars().all()
         return top_result
