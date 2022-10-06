@@ -10,32 +10,10 @@ If web-service gets a request with the shortened URL then the user should be red
 URL must go through appropriate validation before shorting, and return appropriate error responses if the URL is not valid.
 
 
-## Prepare Environment
+## Start
 
-### Create project structure
+To build the appropriate Docker container, run the following from your terminal:
 
-Create the app folder:
-
-```bash
-$ mkdir shortener_app
-```
-
-In app forlder create __init__.py file what shows shortener_app folder is a package:
-
-```bash
-$ touch shortener_app/__init__.py
-```
-
-### Create a virtual environment
-
-To create virtual environment using venv package:
-
-```bash
-$ python3 -m venv .venv
-```
-
-Activation virtual environment:
-
-```bash
-$ source .venv/bin/activate
+```cmd
+docker-compose up -d --build
 ```
