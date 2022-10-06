@@ -17,3 +17,11 @@ To build the appropriate Docker container, run the following from your terminal:
 ```cmd
 docker-compose up -d --build
 ```
+
+To run container:
+
+```cmd
+docker-compose up -d --build
+```
+
+Aplication run  http://0.0.0.0:8000/
