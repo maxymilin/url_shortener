@@ -11,3 +11,9 @@ services:
       - ./backend/.env
     ports:
       - 8000:8000
+  db:
+    image: mysql
+    ports:
+      - "3307:3307"
+    env_file:
+      - ./backend/.env
