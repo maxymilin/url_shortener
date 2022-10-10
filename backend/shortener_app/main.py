@@ -45,9 +45,9 @@ async def root():
     return "Hello, World"
 
 
-@app.post("/shorten_url", response_model=schemas.URL)
+@app.post("/shorten_url")
 async def create_url(url: schemas.URLBase, request: Request):
-    client_ip = request.client.host + "|" #+ str(request.client.port) + "|"
+    client_ip = request.client.host
     if not validators.url(url.target_url):
         raise_bad_request(message="URL is not valid")
     exist_client = await models.Client.is_exist(client_ip, url.target_url)
@@ -64,6 +64,7 @@ async def create_url(url: schemas.URLBase, request: Request):
             key=key,
         )
     return db_url
+
 
 
 @app.get("/count")

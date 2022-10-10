@@ -28,17 +28,17 @@ class AppUser(HttpUser):
     url = None
 
 
-    @task
-    def index_page(self):
-        self.client.get("/")
+    # @task
+    # def index_page(self):
+    #     self.client.get("/")
 
-    @task
-    def count(self):
-        self.client.get("/count")
+    # @task
+    # def count(self):
+    #     self.client.get("/count")
 
-    @task
-    def get_top(self):
-        self.client.get("/top10")
+    # @task
+    # def get_top(self):
+    #     self.client.get("/top10")
 
     @task(1)
     def shortener_url(self):
@@ -63,12 +63,12 @@ class AppUser(HttpUser):
             url = response_dict["target_url"]
             self.key = response_dict["key"]
             logging.debug('Shortener url create: for url = {}, key = {}'.format(url, self.key))
-    @task
-    def get_top(self):
-        with self.client.get(f"/{self.key}", catch_response=True) as response_out:
-            if response_out.status_code == 200:
-                logging.debug(f"Reaching full url: reach full URL: {self.url}")
-            else:
-                error_msg = 'Cant reach full url by short representation: key = {}'.format(self.key)
-                logging.error(error_msg)
-                response_out.failure(error_msg)
+    # @task
+    # def get_top(self):
+    #     with self.client.get(f"/{self.key}", catch_response=True) as response_out:
+    #         if response_out.status_code == 200:
+    #             logging.debug(f"Reaching full url: reach full URL: {self.url}")
+    #         else:
+    #             error_msg = 'Cant reach full url by short representation: key = {}'.format(self.key)
+    #             logging.error(error_msg)
+    #             response_out.failure(error_msg)

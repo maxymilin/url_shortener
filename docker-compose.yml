@@ -1,19 +1,29 @@
 version: '3.9'
 services:
-  server:
+  shortener_app:
     build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ./backend/:/backend/
-    command: uvicorn shortener_app.main:app --workers 4 --proxy-headers --host 0.0.0.0 --port 8000
+    command: sh -c "sleep 10s ; uvicorn shortener_app.main:app --workers 4 --proxy-headers --host 0.0.0.0 --port 8000"
     env_file:
       - ./backend/.env
     ports:
       - 8000:8000
-  db:
-    image: mysql
+    depends_on:
+      - mysql
+  mysql:
+    container_name: shortener_app
+    restart: always
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'test'
+      MYSQL_PASS: 'pass'
     ports:
-      - "3307:3307"
-    env_file:
-      - ./backend/.env
+    # <Port exposed> : < MySQL Port running inside container>
+      - "3306:3306"
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
