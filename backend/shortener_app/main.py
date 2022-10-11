@@ -45,7 +45,7 @@ async def root():
     return "Hello, World"
 
 
-@app.post("/shorten_url")
+@app.post("/shorten_url", response_model=schemas.URL)
 async def create_url(url: schemas.URLBase, request: Request):
     client_ip = request.client.host
     if not validators.url(url.target_url):
