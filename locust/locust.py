@@ -27,7 +27,6 @@ class AppUser(HttpUser):
     key = "count"
     url = None
 
-
     # @task
     # def index_page(self):
     #     self.client.get("/")
@@ -50,19 +49,26 @@ class AppUser(HttpUser):
             catch_response=True,
         ) as response:
             if response.status_code != 200:
-                error_msg = 'Shortener url: response.status_code = {}, expected 200, url = {}'.format(response.status_code, choice(URLS))
+                error_msg = "Shortener url: response.status_code = {}, expected 200, url = {}".format(
+                    response.status_code, choice(URLS)
+                )
                 logging.error(error_msg)
                 response.failure(error_msg)
 
             response_dict = response.json()
             if "key" not in response_dict:
-                error_msg = 'Shortener url: data not in response_dict, url = {}'.format(url)
+                error_msg = "Shortener url: data not in response_dict, url = {}".format(
+                    url
+                )
                 logging.error(error_msg)
                 response.failure(error_msg)
 
             url = response_dict["target_url"]
             self.key = response_dict["key"]
-            logging.debug('Shortener url create: for url = {}, key = {}'.format(url, self.key))
+            logging.debug(
+                "Shortener url create: for url = {}, key = {}".format(url, self.key)
+            )
+
     # @task
     # def get_top(self):
     #     with self.client.get(f"/{self.key}", catch_response=True) as response_out:
