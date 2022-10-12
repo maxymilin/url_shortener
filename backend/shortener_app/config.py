@@ -5,8 +5,12 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     env_name: str = "Local"
-    base_url: str = "http://localhost:8000"
-    db_url: str = "sqlite+aiosqlite:///./shortener.db"
+    user_name: str = "root"
+    password: str = "root"
+    host: str = "mysqldb"
+    port: str = "3306"
+    db_name: str = "shortener_url"
+    db_url: str = f"mysql+asyncmy://{user_name}:{password}@{host}:{port}/{db_name}"
 
     class Config:
         env_file = ".env"

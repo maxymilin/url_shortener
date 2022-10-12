@@ -13,8 +13,8 @@ class URL(Base):
     __tablename__ = "urls"
 
     id = Column(Integer, primary_key=True)
-    key = Column(String, unique=True, index=True)
-    target_url = Column(String, index=True)
+    key = Column(String(10), unique=True, index=True)
+    target_url = Column(String(200), index=True)
     calls_count = Column(Integer, default=1)
 
     @classmethod
@@ -83,7 +83,7 @@ class Client(Base):
     __tablename__ = "clients"
 
     id = Column(Integer, primary_key=True)
-    client_ip_url = Column(String, unique=True, index=True)
+    client_ip_url = Column(String(220), unique=True, index=True)
     url_id = Column(Integer, ForeignKey("urls.id"))
 
     @classmethod
