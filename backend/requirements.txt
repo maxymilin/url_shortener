@@ -1,6 +1,7 @@
 aiosqlite==0.17.0
 anyio==3.6.1
 asyncmy==0.2.5
+asyncpg==0.26.0
 black==22.8.0
 Brotli==1.0.9
 certifi==2022.9.24
@@ -32,6 +33,7 @@ pathspec==0.10.1
 platformdirs==2.5.2
 protobuf==3.20.1
 psutil==5.9.2
+psycopg2-binary==2.9.4
 pycparser==2.21
 pydantic==1.10.2
 python-dotenv==0.21.0

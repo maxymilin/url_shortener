@@ -1,16 +1,17 @@
-version: '3.9'
+version: '3'
 
 services:
-  mysqldb:
-    container_name: mysqldb
-    restart: always
-    image: mysql:latest
+  db:
+    container_name: db
+    image: postgres:12.0-alpine
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=shortener_url
     ports:
-      - "3306:3306"
+      - '5433:5433'
     volumes:
-      - ./mysqldb:/docker-entrypoint-initdb.d/:ro
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   shortener_app:
     container_name: app
@@ -18,12 +19,11 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      DB_URL: "mysql+asyncmy://root:root@mysqldb:3306/shortener_url"
+      DB_URL: "postgresql+asyncpg://username:password@db:5432/shortener_url"
     volumes:
       - ./backend/:/backend/
     ports:
       - 5000:5000
     depends_on:
-      - mysqldb
+      - db
     command: sh -c "sleep 20s; uvicorn shortener_app.main:app --proxy-headers --host 0.0.0.0 --port 5000"
-
